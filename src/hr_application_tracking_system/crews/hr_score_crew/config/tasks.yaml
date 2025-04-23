@@ -1,0 +1,153 @@
+job_description_parsing_task:
+  description: >
+    Parse a job description from platforms such as LinkedIn or Naukri.
+
+    Extract and organize the following structured data from the job posting:
+    - Job Title
+    - Combined Description including: 
+      - Minimum Years of Experience
+      - Summary of Responsibilities
+      - Required Skills
+      - Education Requirements
+      - Certifications
+    - Skills
+
+    Ensure the output is clean, relevant, and free from redundancy.
+    Return empty strings or empty lists if any specific field is missing from the job post.
+
+  expected_output: >
+    A JSON object with the following structure:
+    {
+      "job_title": "Data Scientist",
+      "description": "This role requires a minimum of 3 years of experience. 
+      Responsibilities include building ML models... Required skills include Python, 
+      TensorFlow... A Bachelor's degree in Computer Science is required. Preferred certifications 
+      include AWS Certified Data Analytics.",
+      "skills": "Python, TensorFlow, SQL"
+    }
+
+    All fields must be included in the output. Use empty values if the source 
+    job post does not contain the respective information.
+
+  agent: job_description_parser
+
+matching_task:
+  description: >
+    Compare the structured resume data with the structured job description to identify
+    aligned and missing elements across categories such as skills, experience, and education.
+
+    Your output should highlight:
+    - What is matched between the resume and job description
+    - What is missing or partially aligned
+    - Include brief contextual notes (e.g., "skill mentioned but not at required level")
+
+  expected_output: >
+    A JSON object with the following fields:
+    {
+      "id": 123,
+      "name": "Jane Doe",
+      "structured_comparison_summary": "The candidate matches most required skills such as Python and SQL
+                                        but lacks experience in cloud platforms. Education level meets the requirement,
+                                        and years of experience are slightly below the required threshold."
+    }
+    Ensure clarity and relevance in the summary without scoring or evaluative language.
+  agent: matching_algorithm
+
+weighting_criteria_generation_task:
+  description: >
+    Analyze the provided job description and generate four key evaluation criteria with appropriate weights.
+    These will guide the resume evaluation process objectively.
+
+    Focus on the most impactful aspects for candidate-job alignment:
+    - Skills relevance
+    - Years of experience
+    - Education level
+    - Certifications (or equivalent professional credentials)
+
+  expected_output: >
+    A JSON array of exactly four objects, each representing one evaluation criterion, structured as follows:
+    [
+      {
+        "name": "Skills Match",
+        "description": "Alignment between the candidate’s skills and the skills required by the job",
+        "weight": 40,
+        "justification": "Skills are the most critical factor for performing the job effectively"
+      },
+      {
+        "name": "Years of Experience",
+        "description": "The candidate’s total relevant experience compared to job expectations",
+        "weight": 30,
+        "justification": "Experience often correlates with the ability to handle complex responsibilities"
+      },
+      {
+        "name": "Education",
+        "description": "Whether the candidate meets the required or preferred educational qualifications",
+        "weight": 20,
+        "justification": "Education reflects the foundational knowledge expected for the role"
+      },
+      {
+        "name": "Certifications",
+        "description": "Possession of relevant certifications or licenses as stated in the job description",
+        "weight": 10,
+        "justification": "Certifications add credibility and specialized qualifications where required"
+      }
+    ]
+
+    Ensure weights sum exactly to 100 and avoid overlap between criteria.
+  agent: weighting_criteria_generator
+
+resume_scoring_task:
+  description: >
+    Use the structured resume, job description, and weighting criteria to compute a final numeric score.
+    Evaluate the resume across the defined criteria and provide detailed feedback for each area.
+
+  expected_output: >
+    A detailed JSON object with the following fields:
+    - id: Candidate's email address
+    - name: Candidate's full name
+    - scores: A list of objects, each containing:
+      - criterion: Name of the evaluation criterion
+      - weight: Weight applied to this criterion (must align with weighting task)
+      - score: Score (0–100) the candidate received for this criterion
+      - reasoning: A brief explanation for the score given
+    - final_score: A weighted sum of the individual scores (0–100, rounded if needed)
+    - reasoning: A brief explanation for the general score given
+    - feedback: Actionable suggestions on how the candidate could improve their fit for the role
+
+    Example output:
+    {
+      "id": 123,
+      "name": "Jane Doe",
+      "scores": [
+        {
+          "criterion": "Skills Match",
+          "weight": 40,
+          "score": 78,
+          "reasoning": "Strong overlap with required tools and frameworks, but lacking in two critical areas."
+        },
+        {
+          "criterion": "Years of Experience",
+          "weight": 30,
+          "score": 85,
+          "reasoning": "Experience aligns well with job expectations."
+        },
+        {
+          "criterion": "Education",
+          "weight": 20,
+          "score": 90,
+          "reasoning": "Meets the minimum education requirement with a relevant degree."
+        },
+        {
+          "criterion": "Certifications",
+          "weight": 10,
+          "score": 60,
+          "reasoning": "Some certifications are relevant but missing key ones mentioned in the job post."
+        }
+      ],
+      "final_score": 79.9,
+      "reasoning": "The experience aligns well with the job expectations but lacks key certifications."
+      "feedback": "Consider obtaining the AWS Certified Solutions Architect credential and gaining deeper experience in Kubernetes for better alignment."
+    }
+
+  agent: scoring_system
+
