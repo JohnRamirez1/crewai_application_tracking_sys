@@ -1,10 +1,15 @@
 #!/usr/bin/env python
-import sys
+
+# import sys
 import warnings
+import os
+import csv
+from pathlib import Path
+from crews.hr_sumary_crew import HRSummaryCrew
+from tools.read_resume_file import read_resume_file
 
-from datetime import datetime
-
-from hr_application_tracking_system.crew import HrApplicationTrackingSystem
+# from datetime import datetime
+# from hr_application_tracking_system.crew import HrApplicationTrackingSystem
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
@@ -13,54 +18,36 @@ warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 # Replace with inputs you want to test with, it will automatically
 # interpolate any tasks and agents information
 
-def run():
-    """
-    Run the crew.
-    """
-    inputs = {
-        'topic': 'Agentic solutions for sustainable Agriculture',
-        'current_year': str(datetime.now().year)
-    }
-    
-    try:
-        HrApplicationTrackingSystem().crew().kickoff(inputs=inputs)
-    except Exception as e:
-        raise Exception(f"An error occurred while running the crew: {e}")
+def run_summary_on_resumes(resume_folder: str, output_csv: str):
+    crew = HRSummaryCrew().crew()
+    candidate_summaries = []
 
+    for filename in os.listdir(resume_folder):
+        filepath = os.path.join(resume_folder, filename)
+        if not filename.lower().endswith(('.pdf', '.docx', '.html')):
+            continue
 
-def train():
-    """
-    Train the crew for a given number of iterations.
-    """
-    inputs = {
-        "topic": "AI LLMs"
-    }
-    try:
-        HrApplicationTrackingSystem().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
+        resume_text = read_resume_file(filepath)
+        result = crew.kickoff(inputs={"resume_text": resume_text})
 
-    except Exception as e:
-        raise Exception(f"An error occurred while training the crew: {e}")
+        candidate_summaries.append({
+            "id": result.id,
+            "name": result.name,
+            "email": result.email,
+            "bio": result.bio,
+            "skills": result.skills,
+        })
 
-def replay():
-    """
-    Replay the crew execution from a specific task.
-    """
-    try:
-        HrApplicationTrackingSystem().crew().replay(task_id=sys.argv[1])
+    # Write to CSV
+    with open(output_csv, "w", newline='', encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["id", "name", "email", "bio", "skills"])
+        writer.writeheader()
+        writer.writerows(candidate_summaries)
 
-    except Exception as e:
-        raise Exception(f"An error occurred while replaying the crew: {e}")
+    print(f"✅ Summary written to {output_csv}")
 
-def test():
-    """
-    Test the crew execution and returns the results.
-    """
-    inputs = {
-        "topic": "AI LLMs",
-        "current_year": str(datetime.now().year)
-    }
-    try:
-        HrApplicationTrackingSystem().crew().test(n_iterations=int(sys.argv[1]), openai_model_name=sys.argv[2], inputs=inputs)
-
-    except Exception as e:
-        raise Exception(f"An error occurred while testing the crew: {e}")
+if __name__ == "__main__":
+    resume_folder = "data/resumes"       # Put your resume files here
+    output_csv = "output/resume_summary.csv"
+    Path("output").mkdir(exist_ok=True)
+    run_summary_on_resumes(resume_folder, output_csv)
