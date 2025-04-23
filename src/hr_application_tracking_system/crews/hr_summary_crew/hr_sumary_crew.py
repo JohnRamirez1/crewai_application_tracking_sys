@@ -1,28 +1,45 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
+from hr_application_tracking_system.types import  Candidate, CandidateKeywords
 
 @CrewBase
-class HRScoreCrew:
-    """HR Score Response Crew"""
+class HRSummaryCrew:
+    """HR Resume Summary Crew"""
 
     agents_config = "config/agents.yaml"
     tasks_config = "config/tasks.yaml"
 
     @agent
-    def email_followup_agent(self) -> Agent:
+    def resume_parser_agent(self) -> Agent:
         return Agent(
-            config=self.agents_config["email_followup_agent"],
+            config=self.agents_config["resume_parser_agent"],
             verbose=True,
             allow_delegation=False,
         )
-
-    @task
-    def send_followup_email_task(self) -> Task:
-        return Task(
-            config=self.tasks_config["send_followup_email"],
+    @agent
+    def resume_keyword_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config["resume_keyword_agent"],
             verbose=True,
+            allow_delegation=False,
+        )
+    
+    @task
+    def resume_parsing_task(self) -> Task:
+        return Task(
+            config=self.tasks_config["resume_parsing_task"],
+            verbose=True,
+            output_pydantic=Candidate,
         )
 
+    @task
+    def resume_keyword_extraction_task(self) -> Task:
+        return Task(
+            config=self.tasks_config["resume_keyword_extraction_task"],
+            verbose=True,
+            output_pydantic=CandidateKeywords,
+        )
+    
     @crew
     def crew(self) -> Crew:
         """Creates the Lead Response Crew"""

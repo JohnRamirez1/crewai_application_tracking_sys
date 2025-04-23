@@ -25,7 +25,7 @@ resume_parsing_task:
   expected_output: >
     A structured JSON object with the following keys only: candidate_id, name, summary, skills.
     Do NOT include explanations, markdown, or additional commentary.
-  agent: resume_parser
+  agent: resume_parser_agent
 
 resume_keyword_extraction_task:
   description: >
@@ -66,4 +66,4 @@ resume_keyword_extraction_task:
 
     Do not include irrelevant or repeated keywords.
     Output must be valid JSON with only the fields: email, name, keywords.
-  agent: resume_keyword_analyst
+  agent: resume_keyword_agent

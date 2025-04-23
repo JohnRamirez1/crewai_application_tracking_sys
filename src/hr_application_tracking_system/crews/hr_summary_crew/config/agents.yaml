@@ -1,4 +1,4 @@
-resume_parser:
+resume_parser_agent:
   role: >
     Resume Parsing Agent
   goal: >
@@ -11,7 +11,7 @@ resume_parser:
     across diverse formats and layouts, ensuring the output is clean, complete,
     and standardized for further automated analysis.
 
-resume_keyword_analyst:
+resume_keyword_agent:
   role: >
     Resume Keyword Analyst Agent
   goal: >
