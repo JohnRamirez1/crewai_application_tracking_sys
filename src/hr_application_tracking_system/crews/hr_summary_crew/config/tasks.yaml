@@ -5,7 +5,7 @@ resume_parsing_task:
 
     Extract key personal and professional information relevant for evaluating the candidate.
     Focus on:
-    - Identifying name and creating a unique ID
+    - Identifying name
     - Writing a professional summary that includes total years of experience, education, and certifications
     - Listing relevant skills
 
@@ -16,7 +16,6 @@ resume_parsing_task:
     ADDITIONAL INSTRUCTIONS
     -----------------------
     Your output MUST be a valid JSON with these fields:
-    - "id": Unique identifier for the candidate
     - "name": Candidate's full name (used as unique identifier)
     - "email": The candidate’s email address (if available)
     - "bio": A concise paragraph including total years of experience, education, and certifications
@@ -44,7 +43,6 @@ resume_keyword_extraction_task:
     ------------
     Parsed Resume:
     {
-      "id": 123
       "name": "John Doe",
       "email": "candidate@example.com",
       "bio": "...",
@@ -53,13 +51,11 @@ resume_keyword_extraction_task:
 
   expected_output: >
     A JSON object containing:
-    - "id":  Unique identifier for the candidate
     - "name": Candidate’s full name
     - "keywords": string of commas separated relevant keywords
 
     Example:
     {
-      "id": 123,
       "name": "Jane Doe"
       "keywords": "Python, Project Management, AWS, Scrum, Data Analysis"
     }

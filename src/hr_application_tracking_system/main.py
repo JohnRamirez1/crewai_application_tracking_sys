@@ -5,7 +5,7 @@ import warnings
 import os
 import csv
 from pathlib import Path
-from crews.hr_sumary_crew import HRSummaryCrew
+from crews.hr_summary_crew.hr_sumary_crew import HRSummaryCrew     
 from tools.read_resume_file import read_resume_file
 
 # from datetime import datetime
@@ -29,18 +29,22 @@ def run_summary_on_resumes(resume_folder: str, output_csv: str):
 
         resume_text = read_resume_file(filepath)
         result = crew.kickoff(inputs={"resume_text": resume_text})
+        # Separate outputs from both tasks
+        candidate_data = result["resume_parsing_task"]
+        keywords_data = result["resume_keyword_extraction_task"]
 
         candidate_summaries.append({
-            "id": result.id,
-            "name": result.name,
-            "email": result.email,
-            "bio": result.bio,
-            "skills": result.skills,
+        "id": candidate_data.id,
+        "name": candidate_data.name,
+        "email": candidate_data.email,
+        "bio": candidate_data.bio,
+        "skills": candidate_data.skills,
+        "keywords": keywords_data.keywords
         })
 
     # Write to CSV
     with open(output_csv, "w", newline='', encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["id", "name", "email", "bio", "skills"])
+        writer = csv.DictWriter(f, fieldnames=["id", "name", "email", "bio", "skills", "keywords"])
         writer.writeheader()
         writer.writerows(candidate_summaries)
 
