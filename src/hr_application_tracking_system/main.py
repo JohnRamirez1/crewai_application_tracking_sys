@@ -29,29 +29,31 @@ def run_summary_on_resumes(resume_folder: str, output_csv: str):
 
         resume_text = read_resume_file(filepath)
         result = crew.kickoff(inputs={"resume_text": resume_text})
+        # print(type(result))
+        # print(result.raw)
         # Separate outputs from both tasks
-        candidate_data = result["resume_parsing_task"]
-        keywords_data = result["resume_keyword_extraction_task"]
+        # candidate_data = result["resume_parsing_task"]
+        # keywords_data = result["resume_keyword_extraction_task"]
 
-        candidate_summaries.append({
-        "id": candidate_data.id,
-        "name": candidate_data.name,
-        "email": candidate_data.email,
-        "bio": candidate_data.bio,
-        "skills": candidate_data.skills,
-        "keywords": keywords_data.keywords
-        })
+        # candidate_summaries.append({
+        # "id": result.raw.id,
+        # "name": result.raw.name,
+        # "email": result.raw.email,
+        # "bio": result.raw.bio,
+        # "skills": result.raw.skills,
+        # "keywords": result.raw.keywords
+        # })
 
     # Write to CSV
-    with open(output_csv, "w", newline='', encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["id", "name", "email", "bio", "skills", "keywords"])
-        writer.writeheader()
-        writer.writerows(candidate_summaries)
+    # with open(output_csv, "w", newline='', encoding="utf-8") as f:
+    #     writer = csv.DictWriter(f, fieldnames=["id", "name", "email", "bio", "skills", "keywords"])
+    #     writer.writeheader()
+    #     writer.writerows(candidate_summaries)
 
-    print(f"✅ Summary written to {output_csv}")
+    # print(f"✅ Summary written to {output_csv}")
 
 if __name__ == "__main__":
     resume_folder = "data/resumes"       # Put your resume files here
-    output_csv = "output/resume_summary.csv"
+    output_csv = "data/resume_summary.csv"
     Path("output").mkdir(exist_ok=True)
     run_summary_on_resumes(resume_folder, output_csv)

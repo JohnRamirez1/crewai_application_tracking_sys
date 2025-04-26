@@ -25,6 +25,9 @@ resume_parsing_task:
     A structured JSON object with the following keys only: candidate_id, name, summary, skills.
     Do NOT include explanations, markdown, or additional commentary.
   agent: resume_parser_agent
+  instruction: >
+    After extracting the candidate information, use the `save_to_csv` tool
+    to save the parsed output as a CSV entry.
 
 resume_keyword_extraction_task:
   description: >
@@ -51,15 +54,19 @@ resume_keyword_extraction_task:
 
   expected_output: >
     A JSON object containing:
-    - "name": Candidate’s full name
+    - "name": Candidate's full name (used as unique identifier)
     - "keywords": string of commas separated relevant keywords
 
     Example:
     {
-      "name": "Jane Doe"
+      "id": 123
+      "name": "John Doe",
       "keywords": "Python, Project Management, AWS, Scrum, Data Analysis"
     }
 
     Do not include irrelevant or repeated keywords.
-    Output must be valid JSON with only the fields: email, name, keywords.
+    Output must be valid JSON with only the fields:id, name,keywords.
   agent: resume_keyword_agent
+  instruction: >
+    After extracting the candidate information, use the `save_to_csv` tool
+    to save the parsed output as a CSV entry.

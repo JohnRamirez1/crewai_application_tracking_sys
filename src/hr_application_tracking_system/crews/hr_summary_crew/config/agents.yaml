@@ -10,7 +10,7 @@ resume_parser_agent:
     Your task is to accurately identify and extract information from resumes
     across diverse formats and layouts, ensuring the output is clean, complete,
     and standardized for further automated analysis.
-
+  
 resume_keyword_agent:
   role: >
     Resume Keyword Analyst Agent
@@ -21,5 +21,4 @@ resume_keyword_agent:
     You are a specialized agent trained in resume keyword analysis.
     Your role is to extract meaningful keywords and phrases that reflect
     the candidate’s professional profile based on their content.
-
-
+  

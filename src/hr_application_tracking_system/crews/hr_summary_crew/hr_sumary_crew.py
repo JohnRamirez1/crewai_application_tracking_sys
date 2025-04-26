@@ -1,6 +1,8 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from hr_application_tracking_system.types import  Candidate, CandidateKeywords
+from hr_types import  Candidate, CandidateKeywords
+from tools.save_csv_file import SaveToCSVTool
+
 
 @CrewBase
 class HRSummaryCrew:
@@ -13,6 +15,7 @@ class HRSummaryCrew:
     def resume_parser_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["resume_parser_agent"],
+            tools=[SaveToCSVTool()],
             verbose=True,
             allow_delegation=False,
         )
@@ -20,6 +23,7 @@ class HRSummaryCrew:
     def resume_keyword_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["resume_keyword_agent"],
+            tools=[SaveToCSVTool()],
             verbose=True,
             allow_delegation=False,
         )
