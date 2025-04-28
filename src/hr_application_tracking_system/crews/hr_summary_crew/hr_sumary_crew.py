@@ -1,7 +1,15 @@
-from crewai import Agent, Crew, Process, Task
+from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from hr_types import  Candidate, CandidateKeywords
 from tools.save_csv_file import SaveToCSVTool
+# import streamlit as st
+# @st.cache_resource
+def load_llm():
+    llm = LLM(
+        model="ollama/llama3.2:1b",
+        base_url="http://localhost:11434"
+    )
+    return llm
 
 
 @CrewBase
@@ -15,24 +23,33 @@ class HRSummaryCrew:
     def resume_parser_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["resume_parser_agent"],
-            tools=[SaveToCSVTool()],
-            verbose=True,
+            llm=load_llm(),
+            verbose=False,
             allow_delegation=False,
         )
     @agent
     def resume_keyword_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["resume_keyword_agent"],
-            tools=[SaveToCSVTool()],
-            verbose=True,
+            llm=load_llm(),
+            verbose=False,
             allow_delegation=False,
         )
-    
+    # @agent
+    # def save_file_agent(self) -> Agent:
+    #     return Agent(
+    #         config=self.agents_config["save_file_agent"],
+    #         tools=[SaveToCSVTool()],
+    #         llm=load_llm(),
+    #         verbose=False,
+    #         allow_delegation=False,
+        # )
+
     @task
     def resume_parsing_task(self) -> Task:
         return Task(
             config=self.tasks_config["resume_parsing_task"],
-            verbose=True,
+            verbose=False,
             output_pydantic=Candidate,
         )
 
@@ -40,10 +57,18 @@ class HRSummaryCrew:
     def resume_keyword_extraction_task(self) -> Task:
         return Task(
             config=self.tasks_config["resume_keyword_extraction_task"],
-            verbose=True,
+            verbose=False,
             output_pydantic=CandidateKeywords,
         )
     
+    # @task
+    # def save_resume_task(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config["save_resume_task"],
+    #         verbose=False,
+    #         output_pydantic=CandidateKeywords,
+        # )
+
     @crew
     def crew(self) -> Crew:
         """Creates the Lead Response Crew"""

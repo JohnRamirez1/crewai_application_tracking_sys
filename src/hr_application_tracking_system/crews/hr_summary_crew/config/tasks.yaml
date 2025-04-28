@@ -25,15 +25,13 @@ resume_parsing_task:
     A structured JSON object with the following keys only: candidate_id, name, summary, skills.
     Do NOT include explanations, markdown, or additional commentary.
   agent: resume_parser_agent
-  instruction: >
-    After extracting the candidate information, use the `save_to_csv` tool
-    to save the parsed output as a CSV entry.
 
 resume_keyword_extraction_task:
   description: >
-    Extract relevant keywords from the candidate’s parsed resume data.
+    Extract and structure candidate information from parsed resume data,
+    focusing on identifying relevant keywords and preparing the data for storage.
 
-    Focus on identifying any terms related to:
+    Focus areas for keyword extraction:
     - Job Titles
     - Skills
     - Technologies
@@ -53,20 +51,41 @@ resume_keyword_extraction_task:
     }
 
   expected_output: >
-    A JSON object containing:
-    - "name": Candidate's full name (used as unique identifier)
-    - "keywords": string of commas separated relevant keywords
+    A valid JSON object containing:
+    - "name": Candidate's full name (used as a unique identifier)
+    - "email": Candidate’s email address (if available)
+    - "bio": A concise paragraph summarizing total years of experience, education, and certifications
+    - "skills": A list of key skills (from resume or inferred)
+    - "keywords": A string of comma-separated relevant keywords
 
     Example:
     {
-      "id": 123
       "name": "John Doe",
-      "keywords": "Python, Project Management, AWS, Scrum, Data Analysis"
+      "email": "candidate@example.com",
+      "bio": "Experienced software engineer with 8 years of experience, B.Sc. in Computer Science, AWS Certified.",
+      "skills": ["Python", "AWS", "Data Analysis"],
+      "keywords": "Python, AWS, Data Analysis, Software Engineering"
     }
 
-    Do not include irrelevant or repeated keywords.
-    Output must be valid JSON with only the fields:id, name,keywords.
+    Important:
+    - Do not include irrelevant, repeated, or filler keywords.
+    - Output must be a valid JSON object with exactly these fields.
   agent: resume_keyword_agent
-  instruction: >
-    After extracting the candidate information, use the `save_to_csv` tool
-    to save the parsed output as a CSV entry.
+
+# save_resume_task:
+#   description: >
+#     Save structured candidate information (already extracted as JSON) into a CSV file.
+
+#   expected_output: >
+#     Confirm successful saving of the given JSON data.
+
+#   instruction: >
+#     Use the `save_to_csv` tool to save the received JSON object.
+#     Ensure the JSON contains the fields: name, email, bio, skills, keywords.
+#     You are only responsible for saving; do not modify the data.
+
+#   agent: save_file_agent
+
+  
+
+  

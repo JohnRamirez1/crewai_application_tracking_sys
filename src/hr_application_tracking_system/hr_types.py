@@ -16,6 +16,9 @@ class Candidate(BaseModel):
 class CandidateKeywords(BaseModel):
     id: str
     name: str
+    email: str
+    bio: str
+    skills: str
     keywords: str
 
 class CandidateMatch(BaseModel):
