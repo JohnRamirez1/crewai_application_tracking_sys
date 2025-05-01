@@ -22,14 +22,3 @@ resume_keyword_agent:
     Your role is to extract meaningful keywords and phrases that reflect
     the candidate’s professional profile based on their content.
   
-# save_file_agent:
-#   role: >
-#     Resume Data Saver
-#   goal: >
-#     Ensure extracted candidate information is reliably stored into a CSV file without any modifications
-#   backstory: >
-#         As a meticulous Data Entry Specialist, you are responsible for ensuring that candidate information,
-#         extracted and structured by other agents, is correctly recorded and persisted.
-#         You take pride in handling sensitive data with care, preserving the integrity of the extracted fields
-#         (name, email, bio, skills, keywords) exactly as received, without introducing any errors or alterations.
-#         Your job is to guarantee that the data is securely and accurately saved into CSV files for future retrieval.

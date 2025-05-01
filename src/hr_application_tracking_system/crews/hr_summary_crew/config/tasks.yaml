@@ -19,72 +19,37 @@ resume_parsing_task:
     - "name": Candidate's full name (used as unique identifier)
     - "email": The candidate’s email address (if available)
     - "bio": A concise paragraph including total years of experience, education, and certifications
-    - "skills": List of key skills (from resume or inferred)
+    - "skills": List of key skills from resume or inferred (comma-separated string)
 
   expected_output: >
-    A structured JSON object with the following keys only: candidate_id, name, summary, skills.
+    A structured JSON object with the following keys only:name, email, bio, skills.
     Do NOT include explanations, markdown, or additional commentary.
   agent: resume_parser_agent
 
 resume_keyword_extraction_task:
   description: >
-    Extract and structure candidate information from parsed resume data,
-    focusing on identifying relevant keywords and preparing the data for storage.
+    Based on the structured resume data, extract a list of relevant keywords.
 
-    Focus areas for keyword extraction:
-    - Job Titles
-    - Skills
-    - Technologies
-    - Certifications
-    - Industry Terminology
+    Focus areas:
+    - Job titles, skills, technologies, certifications, and industry terminology
+    - Avoid duplicates or irrelevant/filler words
 
-    Only include meaningful, non-duplicate keywords.
-
-    INPUT FORMAT
-    ------------
-    Parsed Resume:
-    {
-      "name": "John Doe",
-      "email": "candidate@example.com",
-      "bio": "...",
-      "skills": [...]
-    }
-
+    Input: A JSON object with fields: name, email, bio, skills.
+    
+    ADDITIONAL INSTRUCTIONS
+    -----------------------
+    Your output MUST be a valid JSON with these fields:
+    - "name": Candidate's full name (used as unique identifier)
+    - "email": The candidate’s email address (if available)
+    - "bio": A concise paragraph including total years of experience, education, and certifications
+    - "skills": List of key skills from resume or inferred (comma-separated string)
+    - "keywords": List of relevant keywords (comma-separated string)
+    
   expected_output: >
-    A valid JSON object containing:
-    - "name": Candidate's full name (used as a unique identifier)
-    - "email": Candidate’s email address (if available)
-    - "bio": A concise paragraph summarizing total years of experience, education, and certifications
-    - "skills": A list of key skills (from resume or inferred)
-    - "keywords": A string of comma-separated relevant keywords
-
-    Example:
-    {
-      "name": "John Doe",
-      "email": "candidate@example.com",
-      "bio": "Experienced software engineer with 8 years of experience, B.Sc. in Computer Science, AWS Certified.",
-      "skills": ["Python", "AWS", "Data Analysis"],
-      "keywords": "Python, AWS, Data Analysis, Software Engineering"
-    }
-
-    Important:
-    - Do not include irrelevant, repeated, or filler keywords.
-    - Output must be a valid JSON object with exactly these fields.
+    A structured JSON object with the following keys only:name, email, bio, skills, keywords.
+    Do NOT include explanations, markdown, or additional commentary.
   agent: resume_keyword_agent
 
-# save_resume_task:
-#   description: >
-#     Save structured candidate information (already extracted as JSON) into a CSV file.
-
-#   expected_output: >
-#     Confirm successful saving of the given JSON data.
-
-#   instruction: >
-#     Use the `save_to_csv` tool to save the received JSON object.
-#     Ensure the JSON contains the fields: name, email, bio, skills, keywords.
-#     You are only responsible for saving; do not modify the data.
-
-#   agent: save_file_agent
 
   
 

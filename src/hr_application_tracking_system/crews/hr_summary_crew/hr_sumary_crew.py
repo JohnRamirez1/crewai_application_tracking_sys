@@ -35,15 +35,6 @@ class HRSummaryCrew:
             verbose=False,
             allow_delegation=False,
         )
-    # @agent
-    # def save_file_agent(self) -> Agent:
-    #     return Agent(
-    #         config=self.agents_config["save_file_agent"],
-    #         tools=[SaveToCSVTool()],
-    #         llm=load_llm(),
-    #         verbose=False,
-    #         allow_delegation=False,
-        # )
 
     @task
     def resume_parsing_task(self) -> Task:
@@ -51,6 +42,7 @@ class HRSummaryCrew:
             config=self.tasks_config["resume_parsing_task"],
             verbose=False,
             output_pydantic=Candidate,
+            output_key="parsed_resume",
         )
 
     @task
@@ -59,16 +51,9 @@ class HRSummaryCrew:
             config=self.tasks_config["resume_keyword_extraction_task"],
             verbose=False,
             output_pydantic=CandidateKeywords,
+            input={"parsed_resume": "{{ parsed_resume }}"}
         )
     
-    # @task
-    # def save_resume_task(self) -> Task:
-    #     return Task(
-    #         config=self.tasks_config["save_resume_task"],
-    #         verbose=False,
-    #         output_pydantic=CandidateKeywords,
-        # )
-
     @crew
     def crew(self) -> Crew:
         """Creates the Lead Response Crew"""

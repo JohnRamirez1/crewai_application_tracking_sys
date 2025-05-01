@@ -7,9 +7,7 @@ import csv
 from pathlib import Path
 from crews.hr_summary_crew.hr_sumary_crew import HRSummaryCrew     
 from tools.read_resume_file import read_resume_file
-
-# from datetime import datetime
-# from hr_application_tracking_system.crew import HrApplicationTrackingSystem
+import json
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
@@ -29,15 +27,16 @@ def run_summary_on_resumes(resume_folder: str, output_csv: str):
 
         resume_text = read_resume_file(filepath)
         result = crew.kickoff(inputs={"resume_text": resume_text})
+        print(f"filename {filename}")
+        print(filename)
         print(result)
-        file_path = "output/results.txt"
-
+        
         # Open the file in append mode and write
-        with open(file_path, 'a', encoding='utf-8') as f:
+        with open(output_csv, 'a', encoding='utf-8') as f:
              f.write(str(result) + '\n')  # convert to string
 
 if __name__ == "__main__":
     resume_folder = "data/resumes"       # Put your resume files here
-    output_csv = "data/resume_summary.csv"
+    output_csv = "output/results.txt"
     Path("output").mkdir(exist_ok=True)
     run_summary_on_resumes(resume_folder, output_csv)
