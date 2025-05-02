@@ -1,0 +1,20 @@
+job_description_parsing_task:
+  description: >
+    Parse and summarize the job description (PDF, DOCX, or HTML format).
+
+    Extract and organize the following structured data from the job posting:
+    - Job Title
+    - Combined Description including: 
+      - Minimum Years of Experience
+      - Summary of Responsibilities
+      - Education Requirements
+      - Certifications
+    - Skills: job's required skills 
+
+    Ensure the output is clean, relevant, and free from redundancy.
+    Return empty strings or empty lists if any specific field is missing from the job post.
+
+  expected_output: >
+    A structured JSON object with the following keys only: job_title, description, skills.
+    Do NOT include explanations, markdown, or additional commentary.
+  agent: job_description_parser
