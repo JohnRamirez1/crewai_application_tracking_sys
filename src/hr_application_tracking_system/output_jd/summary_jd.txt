@@ -1,0 +1,2 @@
+id,job_title,description,skills
+1,Software Engineer,"Minimum Years of Experience: 3 years. Summary of Responsibilities: Develop and maintain software applications, collaborate with cross-functional teams, participate in code reviews, ensure software quality, and contribute to technical documentation. Education Requirements: Bachelor's degree in Computer Science or related field. Certifications: None.","Java, Python, SQL, Git, Agile methodologies"

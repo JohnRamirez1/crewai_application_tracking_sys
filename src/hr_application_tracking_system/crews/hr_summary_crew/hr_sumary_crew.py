@@ -1,15 +1,13 @@
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from hr_types import  Candidate, CandidateKeywords
-from tools.save_csv_file import SaveToCSVTool
-# import streamlit as st
 # @st.cache_resource
-def load_llm():
-    llm = LLM(
-        model="ollama/llama3.2:1b",
-        base_url="http://localhost:11434"
-    )
-    return llm
+# def load_llm():
+#     llm = LLM(
+#         model="ollama/llama3.2:1b",
+#         base_url="http://localhost:11434"
+#     )
+#     return llm
 
 
 @CrewBase
@@ -23,7 +21,7 @@ class HRSummaryCrew:
     def resume_parser_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["resume_parser_agent"],
-            llm=load_llm(),
+            # llm=load_llm(),
             verbose=False,
             allow_delegation=False,
         )
@@ -31,7 +29,7 @@ class HRSummaryCrew:
     def resume_keyword_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["resume_keyword_agent"],
-            llm=load_llm(),
+            # llm=load_llm(),
             verbose=False,
             allow_delegation=False,
         )
