@@ -1,6 +1,6 @@
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
-from hr_types import  Candidate, CandidateKeywords
+from hr_types import  Candidate, CandidateParsed
 # @st.cache_resource
 # def load_llm():
 #     llm = LLM(
@@ -48,7 +48,7 @@ class HRSummaryCrew:
         return Task(
             config=self.tasks_config["resume_keyword_extraction_task"],
             verbose=False,
-            output_pydantic=CandidateKeywords,
+            output_pydantic=CandidateParsed,
             input={"parsed_resume": "{{ parsed_resume }}"}
         )
     

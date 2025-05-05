@@ -10,11 +10,24 @@ job_description_parsing_task:
       - Education Requirements
       - Certifications
     - Skills: job's required skills 
+    
+    JOB DESCRIPTION
+    ----------------
+    {jd_text}
+
+    ADDITIONAL INSTRUCTIONS
+    -----------------------
+    Your output MUST be a valid JSON with these fields:
+    -" id": given id {id}
+    - "job_title": job_title
+    - "description": The candidate’s email address (if available)
+    - "skills": List of key skills from job description or inferred (comma-separated string)
+
 
     Ensure the output is clean, relevant, and free from redundancy.
     Return empty strings or empty lists if any specific field is missing from the job post.
 
   expected_output: >
-    A structured JSON object with the following keys only: job_title, description, skills.
+    A structured JSON object with the following keys only: id, job_title, description, skills.
     Do NOT include explanations, markdown, or additional commentary.
   agent: job_description_parser

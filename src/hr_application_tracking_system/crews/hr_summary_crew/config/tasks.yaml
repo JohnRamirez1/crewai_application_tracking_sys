@@ -16,6 +16,7 @@ resume_parsing_task:
     ADDITIONAL INSTRUCTIONS
     -----------------------
     Your output MUST be a valid JSON with these fields:
+    -" id": given id {id}
     - "name": Candidate's full name (used as unique identifier)
     - "email": The candidate’s email address (if available)
     - "bio": A concise paragraph including total years of experience, education, and certifications
@@ -34,11 +35,12 @@ resume_keyword_extraction_task:
     - Job titles, skills, technologies, certifications, and industry terminology
     - Avoid duplicates or irrelevant/filler words
 
-    Input: A JSON object with fields: name, email, bio, skills.
+    Input: A JSON object with fields:id, name, email, bio, skills.
     
     ADDITIONAL INSTRUCTIONS
     -----------------------
     Your output MUST be a valid JSON with these fields:
+    - "id": id
     - "name": Candidate's full name (used as unique identifier)
     - "email": The candidate’s email address (if available)
     - "bio": A concise paragraph including total years of experience, education, and certifications
@@ -46,7 +48,7 @@ resume_keyword_extraction_task:
     - "keywords": List of relevant keywords (comma-separated string)
     
   expected_output: >
-    A structured JSON object with the following keys only:name, email, bio, skills, keywords.
+    A structured JSON object with the following keys only:id, name, email, bio, skills, keywords.
     Do NOT include explanations, markdown, or additional commentary.
   agent: resume_keyword_agent
 

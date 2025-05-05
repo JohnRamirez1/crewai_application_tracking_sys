@@ -1,6 +1,6 @@
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
-from hr_types import JobDescription, ScoredCandidate, MatchingAnalysis
+from hr_types import MatchingAnalysis, ScoredCandidate
 
 # @st.cache_resource
 # def load_llm():
@@ -16,15 +16,6 @@ class HRScoreCrew:
 
     agents_config = "config/agents.yaml"
     tasks_config = "config/tasks.yaml"
-
-    @agent
-    def job_description_parser(self) -> Agent:
-        return Agent(
-            config=self.agents_config["job_description_parser"],
-            # llm=load_llm(),
-            verbose=False,
-            allow_delegation=False,
-        )
     
     @agent
     def matching_algorithm(self) -> Agent:
@@ -43,15 +34,7 @@ class HRScoreCrew:
             verbose=False,
             allow_delegation=False,
         )
-    
-    # @task
-    # def job_description_parsing_task(self) -> Task:
-    #     return Task(
-    #         config=self.tasks_config["job_description_parsing_task"],
-    #         verbose=False,
-    #         output_pydantic=JobDescription,
-    #         output_key="parsed_jd",
-    #     )
+   
     
     @task
     def matching_task(self) -> Task:
@@ -59,8 +42,6 @@ class HRScoreCrew:
             config=self.tasks_config["matching_task"],
             verbose=False,
             output_pydantic=MatchingAnalysis,
-            input={"parsed_jd": "{{ parsed_jd}}","parsed_resume": "{{ parsed_resume}}"},
-            output_key="matching_result"
         )
     
     @task
@@ -69,7 +50,6 @@ class HRScoreCrew:
             config=self.tasks_config["resume_scoring_task"],
             verbose=False,
             output_pydantic=ScoredCandidate,
-            input={"matching_result": "{{ matching_result}}"}
         )
     
     @crew
