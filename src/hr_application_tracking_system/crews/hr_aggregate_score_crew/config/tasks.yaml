@@ -1,0 +1,37 @@
+final_score_aggregating_task:
+  description: >
+    Given a candidate with multiple evaluation rounds, calculate the average score
+    for each criterion and provide a single summarized reasoning
+    and feedback combining the insights from all evaluations.
+
+    The output must include:
+    - id: Candidate's ID
+    - name: Candidate's name
+    - email: Candidate's email
+    - skills_score: Average of all skills_score values (rounded)
+    - experience_score: Average of all experience_score values (rounded)
+    - education_score: Average of all education_score values (rounded)
+    - final_score: Average of all final_score values (rounded)
+    - reasoning: Coherent and concise synthesis of all reasoning texts
+    - feedback: Concise and actionable summary of all feedbacks
+
+    Format the output as a valid JSON object.
+  expected_output: >
+    {
+      "id": 123,
+      "name": "Jane Doe",
+      "email": "jane.doe@email.com",
+      "skills_score": 87,
+      "experience_score": 75,
+      "education_score": 90,
+      "final_score": 84,
+      "reasoning": "Summarized reasoning here...",
+      "feedback": "Summarized feedback here..."
+    }
+  agent: evaluation_summary_agent
+
+
+
+  
+
+  

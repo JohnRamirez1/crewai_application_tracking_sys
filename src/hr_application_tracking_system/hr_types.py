@@ -23,7 +23,6 @@ class CandidateParsed(BaseModel):
     skills: str
     keywords: str
 
-
 class MatchingAnalysis(BaseModel):
     id: int
     name: str
@@ -34,8 +33,19 @@ class ScoredCandidate(BaseModel):
     name: str
     email: str
     skills_score: int
-    experience_score: int
+    experience_score:int
     education_score: int
     final_score: int
     reasoning: str
     feedback: str
+
+class ScoredCandidateAcrossRounds(BaseModel):
+    id: int
+    name: str
+    email: str
+    skills_score: List[int]
+    experience_score: List[int]
+    education_score: List[int]
+    final_score: List[int]
+    reasoning: List[str]
+    feedback: List[str]
